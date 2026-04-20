@@ -339,7 +339,7 @@ function App() {
             <Trash2 size={16} /> <span className="btn-text">נקה מסך</span>
           </button>
           <button className="btn-action btn-save" onClick={saveDrawing}>
-            <Save size={16} /> <span className="btn-text">שמור ב-SQL</span>
+            <Save size={16} /> <span className="btn-text">שמור</span>
           </button>
 
           {selectedId && currentUser && (
