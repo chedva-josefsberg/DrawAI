@@ -259,37 +259,31 @@ function App() {
   return (
     <div className="app-container">
       {showLogin && (
-        <div className="login-overlay" style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 1000,
-          display: 'flex', justifyContent: 'center', alignItems: 'center'
-        }}>
-          <div className="login-box" style={{ background: 'white', padding: '40px', borderRadius: '12px', width: '350px', textAlign: 'center' }}>
-            <h2 style={{ color: '#4f46e5', marginBottom: '20px' }}>AI Draw Studio</h2>
-            
-            <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <input type="text" placeholder="שם משתמש" required value={username} onChange={e => setUsername(e.target.value)} style={{ padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }} />
-              <input type="password" placeholder="סיסמה" required value={password} onChange={e => setPassword(e.target.value)} style={{ padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }} />
-              
+        <div className="login-overlay">
+          <div className="login-box">
+            <h2>AI Draw Studio</h2>
+
+            <form className="login-form" onSubmit={handleAuth}>
+              <input className="login-input" type="text" placeholder="שם משתמש" required value={username} onChange={e => setUsername(e.target.value)} />
+              <input className="login-input" type="password" placeholder="סיסמה" required value={password} onChange={e => setPassword(e.target.value)} />
+
               {authError && (
-                <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '8px', borderRadius: '6px', fontSize: '14px', fontWeight: 'bold' }}>
-                  {authError}
-                </div>
+                <div className="auth-error">{authError}</div>
               )}
 
-              <button type="submit" style={{ padding: '10px', background: '#4f46e5', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+              <button className="login-btn-primary" type="submit">
                 {authMode === 'login' ? 'התחבר' : 'הרשם עכשיו'}
               </button>
             </form>
 
-            <div style={{ marginTop: '15px', fontSize: '14px' }}>
+            <div className="login-toggle">
               {authMode === 'login' ? "אין לך חשבון? " : "כבר יש לך חשבון? "}
-              <span onClick={() => { setAuthMode(authMode === 'login' ? 'register' : 'login'); setAuthError(''); }} style={{ color: '#4f46e5', cursor: 'pointer', textDecoration: 'underline' }}>
+              <span onClick={() => { setAuthMode(authMode === 'login' ? 'register' : 'login'); setAuthError(''); }}>
                 לחץ כאן
               </span>
             </div>
             <hr style={{ margin: '20px 0', borderColor: '#eee' }} />
-            <button onClick={() => { setShowLogin(false); setAuthError(''); }} style={{ padding: '10px', width: '100%', background: '#f3f4f6', color: '#374151', border: '1px solid #d1d5db', borderRadius: '6px', cursor: 'pointer' }}>
+            <button className="login-btn-guest" onClick={() => { setShowLogin(false); setAuthError(''); }}>
               המשך כאורח אנונימי (ללא שמירה)
             </button>
           </div>
@@ -324,33 +318,33 @@ function App() {
         </div>
         
         <div className="toolbar-actions">
-           {currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '20px', fontSize: '14px', color: '#4b5563' }}>
-              <UserIcon size={16} /> שלום, <b>{currentUser.username}</b>
-              <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <LogOut size={14}/> התנתק
+          {currentUser ? (
+            <div className="user-info">
+              <UserIcon size={16} /> <span className="btn-text">שלום, <b>{currentUser.username}</b></span>
+              <button className="btn-logout" onClick={handleLogout}>
+                <LogOut size={14}/> <span className="btn-text">התנתק</span>
               </button>
             </div>
           ) : (
-             <span style={{ fontSize: '14px', color: '#9ca3af', marginRight: '20px' }}>משתמש אנונימי</span>
+            <span className="anon-label">משתמש אנונימי</span>
           )}
 
           <button className="btn-action btn-new" onClick={handleNewDrawing}>
-            <Plus size={16} /> ציור חדש
+            <Plus size={16} /> <span className="btn-text">ציור חדש</span>
           </button>
           <button className="btn-action" onClick={handleUndo}>
-            <Undo size={16} /> ביטול
+            <Undo size={16} /> <span className="btn-text">ביטול</span>
           </button>
           <button className="btn-action btn-danger" onClick={() => { setShapes([]); setHistory([]); }}>
-            <Trash2 size={16} /> נקה מסך
+            <Trash2 size={16} /> <span className="btn-text">נקה מסך</span>
           </button>
           <button className="btn-action btn-save" onClick={saveDrawing}>
-            <Save size={16} /> שמור ב-SQL
+            <Save size={16} /> <span className="btn-text">שמור ב-SQL</span>
           </button>
 
           {selectedId && currentUser && (
-             <button className="btn-action btn-danger" onClick={handleDeleteDrawing} style={{ background: '#ef4444', color: 'white', borderColor: '#ef4444' }}>
-               <Trash2 size={16} /> מחק מהמאגר
+             <button className="btn-action btn-danger" onClick={handleDeleteDrawing}>
+               <Trash2 size={16} /> <span className="btn-text">מחק מהמאגר</span>
              </button>
           )}
         </div>
