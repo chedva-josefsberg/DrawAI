@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// במקום משתמשים ב-SQL Server
 builder.Services.AddDbContext<DrawingContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -17,9 +16,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
-        policy => policy.AllowAnyOrigin() // מאפשר לכל מקור לגשת (כולל localhost:4200)
-                        .AllowAnyMethod() // מאפשר GET, POST וכו'
-                        .AllowAnyHeader()); // מאפשר את כל ה-Headers
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyMethod() 
+                        .AllowAnyHeader());
 });
 
 builder.Services.AddHttpClient();

@@ -7,7 +7,7 @@ namespace Server.Models
         public DrawingContext(DbContextOptions<DrawingContext> options) : base(options) { }
 
         public DbSet<Drawing> Drawings { get; set; }
-        public DbSet<User> Users { get; set; } // הטבלה החדשה
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

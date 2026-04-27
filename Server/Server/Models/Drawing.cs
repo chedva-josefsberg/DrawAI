@@ -7,7 +7,6 @@ namespace Server.Models
         public int Id { get; set; }
         public string? Title { get; set; }
         public string? ShapesJson { get; set; }
-
         public int? UserId { get; set; }
 
         [JsonIgnore]

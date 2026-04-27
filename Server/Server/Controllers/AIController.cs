@@ -42,7 +42,7 @@ namespace Server.Controllers
     public class AIController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private static readonly HttpClient _httpClient = new HttpClient(); // לקוח רשת לשליחת הבקשות
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public AIController(IConfiguration configuration)
         {
@@ -57,8 +57,8 @@ namespace Server.Controllers
                 if (request == null || string.IsNullOrEmpty(request.Prompt))
                     return BadRequest("השדה prompt חסר");
 
-                // שולפים את המפתח של Claude
                 var apiKey = _configuration["Anthropic:ApiKey"];
+                var modelName = _configuration["Anthropic:ModelName"];
 
                 if (string.IsNullOrEmpty(apiKey))
                     return StatusCode(500, "API Key is missing in appsettings.json for Anthropic");
@@ -93,13 +93,11 @@ STEP E (AESTHETIC COLORS): Do NOT use basic colors. Use rich CSS colors: 'skyblu
 - line: {""type"": ""line"", ""x1"": num, ""y1"": num, ""x2"": num, ""y2"": num, ""color"": ""str""}
 - ellipse: {""type"": ""ellipse"", ""x"": num, ""y"": num, ""rx"": num, ""ry"": num, ""color"": ""str""}";
 
-                // 1. בניית גוף הבקשה ל-Claude (המודל הכי חדש וחכם שלהם)
                 var requestBody = new
                 {
-                    model = "claude-opus-4-7",
+                    model = modelName,
                     max_tokens = 2000,
-                  //  temperature = 0.1,
-                    system = systemPrompt, // ב-Claude הפרומפט של המערכת נשלח בנפרד
+                    system = systemPrompt,
                     messages = new[]
                     {
                         new { role = "user", content = request.Prompt }
@@ -109,27 +107,25 @@ STEP E (AESTHETIC COLORS): Do NOT use basic colors. Use rich CSS colors: 'skyblu
                 string jsonPayload = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                // 2. הגדרת כותרות האבטחה (Headers) של Anthropic
+                
                 var httpRequest = new HttpRequestMessage(HttpMethod.Post, "https://api.anthropic.com/v1/messages");
                 httpRequest.Headers.Add("x-api-key", apiKey);
                 httpRequest.Headers.Add("anthropic-version", "2023-06-01");
                 httpRequest.Content = content;
 
-                // 3. שליחה וקבלת תשובה
                 var response = await _httpClient.SendAsync(httpRequest);
-               // Console.log(response);
+               
                 string responseContent = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return StatusCode((int)response.StatusCode, $"שגיאת Anthropic: {responseContent}");
+                    return StatusCode((int)response.StatusCode, $"Anthropic Error : {responseContent}");
                 }
 
-                // 4. חילוץ הטקסט מהתשובה של Claude (המבנה שלהם קצת שונה מ-OpenAI)
                 using JsonDocument doc = JsonDocument.Parse(responseContent);
                 string responseText = doc.RootElement.GetProperty("content")[0].GetProperty("text").GetString().Trim();
 
-                // 5. ניקוי וחילוץ ה-JSON בדיוק כפי שהיה
+                
                 var cleaned = responseText
                     .Replace("```json", "")
                     .Replace("```", "")
@@ -158,7 +154,7 @@ STEP E (AESTHETIC COLORS): Do NOT use basic colors. Use rich CSS colors: 'skyblu
                     }
                 }
 
-                if (jsonToParse != null || cleaned.Contains("\"type\"") || cleaned.Contains("\"color\"") || cleaned == "[]")
+                if (jsonToParse != null || cleaned.Contains("\"type\""))
                 {
                     try
                     {

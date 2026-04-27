@@ -282,9 +282,11 @@ function App() {
                 לחץ כאן
               </span>
             </div>
+
+            
             <hr style={{ margin: '20px 0', borderColor: '#eee' }} />
             <button className="login-btn-guest" onClick={() => { setShowLogin(false); setAuthError(''); }}>
-              המשך כאורח אנונימי (ללא שמירה)
+            המשך כאורח אנונימי
             </button>
           </div>
         </div>

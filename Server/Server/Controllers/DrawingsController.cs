@@ -8,29 +8,19 @@ namespace Server.Controllers
     [ApiController]
     public class DrawingsController : ControllerBase
     {
-
         private readonly DrawingContext _db;
 
         public DrawingsController(DrawingContext db)
         {
             _db = db;
         }
- 
-        // שליפת כל הציורים
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            return Ok(_db.Drawings.ToList());
-        }
 
-        // שליפת ציורים לפי משתמש ספציפי
         [HttpGet("user/{userId}")]
         public IActionResult GetByUser(int userId)
         {
             return Ok(_db.Drawings.Where(d => d.UserId == userId).ToList());
         }
 
-        // שמירת ציור חדש
         [HttpPost]
         public IActionResult SaveDrawing([FromBody] Drawing drawing)
         {
@@ -39,7 +29,6 @@ namespace Server.Controllers
             return Ok(drawing);
         }
 
-        // עדכון ציור קיים
         [HttpPut("{id}")]
         public IActionResult UpdateDrawing(int id, [FromBody] Drawing drawing)
         {
@@ -50,14 +39,10 @@ namespace Server.Controllers
             existing.Title = drawing.Title;
             existing.ShapesJson = drawing.ShapesJson;
 
-            if (drawing.UserId.HasValue)
-                existing.UserId = drawing.UserId;
-
             _db.SaveChanges();
             return Ok(existing);
         }
 
-        // מחיקת ציור
         [HttpDelete("{id}")]
         public IActionResult DeleteDrawing(int id)
         {
