@@ -14,7 +14,7 @@ AI Draw Studio היא אפליקציה פולסטאק עם ממשק צ'אט בע
 - התחברות / הרשמה למשתמשים
 - שמירה, טעינה ומחיקה של ציורים ב-SQL
 - ביטול פעולה אחרונה (Undo)
-- גלישה כאורח ללא שמירה
+- גלישה כאורח
 - עיצוב רספונסיבי — מובייל, טאבלט ודסקטופ
 
 ---
@@ -26,7 +26,7 @@ AI Draw Studio היא אפליקציה פולסטאק עם ממשק צ'אט בע
 | Frontend | React 19, Vite, Axios, Lucide Icons |
 | Backend | ASP.NET Core 8, C# |
 | בסיס נתונים | SQL Server (LocalDB לפיתוח) |
-| AI | Anthropic Claude API (`claude-opus-4-7`) |
+| AI | Anthropic Claude API (מודל מוגדר ב-`appsettings.json`) |
 | עיצוב | CSS3, Flexbox, RTL (עברית) |
 
 ---
@@ -53,6 +53,8 @@ cd DrawAI
 ### 2. הגדרת ה-API Key (משתנה סביבה)
 
 ה-API Key של Anthropic **לא נמצא בקוד** — יש להגדיר אותו כמשתנה סביבה לפני הרצה.
+
+שם המודל מוגדר ב-`appsettings.json` תחת `Anthropic.ModelName` וניתן לשנותו בלי לגעת בקוד.
 
 **ב-Visual Studio** — ערוך את הקובץ:
 ```
@@ -125,7 +127,7 @@ DrawAI/
         │   ├── User.cs
         │   ├── Drawing.cs
         │   └── DrawingContext.cs       # Entity Framework DbContext
-        ├── appsettings.json            # הגדרות (ללא API Key)
+        ├── appsettings.json            # הגדרות: ConnectionString, ModelName (ללא API Key)
         └── Program.cs                  # הגדרת שירותים ו-CORS
 ```
 
