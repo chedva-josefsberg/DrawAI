@@ -54,7 +54,6 @@ function App() {
       setShowLogin(false); 
       setUsername('');
       setPassword('');
-      // כשהמשתמש מתחבר, ננקה את הצ'אט הישן ונתחיל שיחה חדשה
       setMessages([{ id: Date.now(), sender: 'bot', text: `ברוך הבא ${response.data.username}! מה תרצה שאצייר עבורך?` }]);
     } catch (error) {
       setAuthError(error.response?.data || "שגיאה בהתחברות, נסי שוב");
@@ -66,8 +65,6 @@ function App() {
     setShapes([]);
     setAllDrawings([]);
     setSelectedId('');
-    
-    // התיקון: איפוס מלא של הצ'אט חזרה להודעת הפתיחה!
     setMessages([
       { id: Date.now(), sender: 'bot', text: 'היי! אני בוט הציור שלך. מה תרצי שאצייר על הקנבס?' }
     ]);
@@ -158,7 +155,7 @@ function App() {
         setMessages(prev => [...prev, { id: Date.now(), sender: 'bot', text: 'ציירתי! עוד משהו?' }]);
       }
     } catch (error) {
-      setMessages(prev => [...prev, { id: Date.now(), sender: 'bot', text: 'אופס, שגיאה.' }]);
+      setMessages(prev => [...prev, { id: Date.now(), sender: 'bot', text:'אופס, שגיאה.' }]);
     } finally {
       setLoading(false);
     }
